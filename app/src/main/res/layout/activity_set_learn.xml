@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.example.benja.wordfun.setlearn.SetLearnActivity">
+    <RelativeLayout
+        android:id="@+id/setLearn_Toolbar"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+            <ImageView
+                android:id="@+id/setLearn_return"
+                android:padding="5dp"
+                android:layout_marginLeft="6dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/vd_return"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+            <TextView
+                android:letterSpacing="0.1"
+                android:text="学习集"
+                android:textSize="24sp"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/setLearn_func"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/vd_func"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        </RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/termList_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/termList"
+                android:clipChildren="false"
+                android:overScrollMode="never"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v7.widget.RecyclerView
+            android:background="@color/white"
+            android:layout_gravity="bottom"
+            android:visibility="invisible"
+            android:elevation="10dp"
+            android:overScrollMode="never"
+            android:id="@+id/setLearn_funcRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
+</LinearLayout>

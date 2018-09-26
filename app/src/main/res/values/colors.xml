@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="pistachio">#9AD868</color>
+    <color name="metallic_seaweed">#028090</color>
+    <color name="persian_green">#00a896</color>
+    <color name="caribbean_green">#02C39A</color>
+    <color name="white">#ffffff</color>
+    <color name="baby_powder">#FDFFFC</color>
+    <color name="antiflash_white">#EDF2F4</color>
+    <color name="platinum">#E5E5E5</color>
+    <color name="pale_silver">#C6C5B9</color>
+    <color name="silver">#BFC0C0</color>
+    <color name="grey_blue">#8D99AE</color>
+    <color name="dark">#000000</color>
+    <color name="light_gray">#eaeaea</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="seablue">#0b8691</color>
+    <color name="baby_gray">#f3f3f3</color>
+    
+    <color name="mid_green">#1A936F</color>
+    <color name="baby_white">#FDFFFC</color>
+    <color name="light_green">#70C1B3</color>
+    <color name="ghost_white">#F8F8FF</color>
+</resources>

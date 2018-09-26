@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray"
+    tools:context="com.example.benja.wordfun.MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/main_frame"
+            android:layout_above="@id/BottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+        <com.benjamin.library.BottomBar.BottomBar
+            android:id="@+id/BottomBar"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:elevation="1dp"
+            android:background="@color/baby_powder"
+            android:layout_alignParentBottom="true"
+            app:items_xml="@xml/items"
+            app:bb_active_color="@color/metallic_seaweed"
+            app:bb_unactive_color="@color/grey_blue"
+            app:icon_size="32dp"
+            app:middle_icon_size="28dp"
+            android:fitsSystemWindows="true"
+            />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
