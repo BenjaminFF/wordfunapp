@@ -35,7 +35,7 @@ public class SetListAdpter extends RecyclerView.Adapter<SetListAdpter.ItemHolder
             private TextView termCount;
             public ItemHolder(View itemView) {
                 super(itemView);
-                ((CardView)itemView).setCardBackgroundColor(SetUtil.getRandomColor(180));
+                ((CardView)itemView).setCardBackgroundColor(SetUtil.getRandomColor(220));
                 title=itemView.findViewById(R.id.listItem_title);
                 createTime=itemView.findViewById(R.id.listItem_createTime);
                 termCount=itemView.findViewById(R.id.listItem_count);

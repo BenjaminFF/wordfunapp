@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/maxtext_dialog"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:scrollbarThumbVertical="@color/white"
+        android:scrollbarSize="5px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/maxTextView"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:includeFontPadding="true"
+            android:paddingHorizontal="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
+</FrameLayout>

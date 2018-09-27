@@ -9,21 +9,27 @@
     android:layout_marginVertical="8dp"
     android:layout_height="400dp">
     <LinearLayout
-        android:weightSum="4"
+        android:weightSum="4.5"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/termText"
-            android:gravity="center"
+            android:includeFontPadding="true"
+            android:paddingHorizontal="50sp"
             android:textSize="24sp"
+            android:gravity="center_vertical"
             android:textColor="@color/white"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:layout_width="match_parent"
             android:layout_height="0dp" />
         <TextView
             android:id="@+id/defText"
-            android:gravity="center"
+            android:includeFontPadding="true"
+            android:paddingVertical="8sp"
+            android:paddingHorizontal="50sp"
+            android:maxLines="8"
+            android:ellipsize="end"
             android:textSize="24sp"
             android:textColor="@color/white"
             android:layout_weight="3"

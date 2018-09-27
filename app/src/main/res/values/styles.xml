@@ -23,4 +23,8 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="MaxTextDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 </resources>

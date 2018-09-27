@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.util.Base64;
 import android.widget.Toast;
 
 import com.example.benja.wordfun.R;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +55,7 @@ public class SetListFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView netHintImg;
     private boolean isConnecting;
+    OkHttpClient okHttpClient;
     View mView;
 
     @SuppressLint("HandlerLeak")
@@ -91,6 +94,7 @@ public class SetListFragment extends Fragment {
         mView=v;
         swipeRefreshLayout=v.findViewById(R.id.setList_refresh_layout);
         netHintImg=v.findViewById(R.id.setList_netHint_img);
+        okHttpClient=new OkHttpClient();
         //先判断网络是否连接，如果未连接
         if(SetUtil.isNetworkAvailable(getContext())){
             netHintImg.setVisibility(View.GONE);
@@ -115,7 +119,6 @@ public class SetListFragment extends Fragment {
         @Override
         public void run() {
             String url = "http://192.168.43.219:8088/api/getwordset?username=benjamin";
-            OkHttpClient okHttpClient=new OkHttpClient();
             final Request request = new Request.Builder()
                     .url(url)
                     .build();
@@ -150,14 +153,15 @@ public class SetListFragment extends Fragment {
         }
     }
 
-    private ArrayList<ListItem> getListFromJson(String json) throws JSONException{
+    private ArrayList<ListItem> getListFromJson(String json) throws Exception{
         ArrayList<ListItem> listItems=new ArrayList<>();
         JSONObject outer=new JSONObject(json);
         JSONArray sets=outer.getJSONArray("sets");
         for(int i=0;i<sets.length();i++){
             ListItem item=new ListItem();
             JSONObject itemJson=sets.getJSONObject(i);
-            item.setTitle(itemJson.getString("title"));
+            String decodedTitle= URLDecoder.decode(itemJson.getString("title"),"UTF-8");
+            item.setTitle(new String(decodedTitle));
             item.setAuthor(itemJson.getString("author"));
             item.setFolder(itemJson.getString("folder"));
             item.setTermCount(itemJson.getInt("termCount"));

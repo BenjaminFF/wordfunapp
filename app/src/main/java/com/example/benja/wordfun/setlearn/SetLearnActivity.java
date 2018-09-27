@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,11 +20,13 @@ import android.widget.ImageView;
 import com.example.benja.wordfun.R;
 import com.example.benja.wordfun.SetUtil;
 import com.example.benja.wordfun.setlist.SetListAdpter;
+import com.example.benja.wordfun.setlist.SetListFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import okhttp3.Call;
@@ -42,6 +45,9 @@ public class SetLearnActivity extends AppCompatActivity {
     private RecyclerView funcRecyclerView;
     private ImageView returnB,funcB;
     private boolean funcTurned;
+    private OkHttpClient okHttpClient;
+    private boolean isConnecting;
+    private SwipeRefreshLayout swipeRefreshLayout;
     @SuppressLint("HandlerLeak")
     private Handler mHandler=new Handler(){
         @Override
@@ -51,7 +57,8 @@ public class SetLearnActivity extends AppCompatActivity {
                     try {
                         termItems=getTermItems(msg.getData().getString("TermSetsJson"));
                         InitRecyclerView(termItems);
-                        Log.i("ATest",msg.getData().getString("TermSetsJson"));
+                        isConnecting=false;
+                        swipeRefreshLayout.setRefreshing(false);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -63,12 +70,24 @@ public class SetLearnActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_learn);
+        okHttpClient=new OkHttpClient();
         new Thread(new getTermListRunnable()).start();
+        isConnecting=true;
         initToolbar();
         funcRecyclerView=findViewById(R.id.setLearn_funcRecyclerView);
         FuncListAdapter funcListAdapter=new FuncListAdapter();
         funcRecyclerView.setAdapter(funcListAdapter);
         funcRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        swipeRefreshLayout=findViewById(R.id.termList_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(!isConnecting){
+                    new Thread(new getTermListRunnable()).start();
+                    isConnecting=true;
+                }
+            }
+        });
     }
 
     private void initToolbar(){
@@ -126,12 +145,13 @@ public class SetLearnActivity extends AppCompatActivity {
             for(int i=0;i<jsonArray.length();i++){
                 TermItem termItem=new TermItem();
                 JSONObject jsonObject=jsonArray.getJSONObject(i);
-                termItem.setTermText(jsonObject.getString("term"));
-                termItem.setDefText(jsonObject.getString("definition"));
+                String decodedTerm= URLDecoder.decode(jsonObject.getString("term"),"UTF-8").replace("<br>","\n");
+                String decodedDef= URLDecoder.decode(jsonObject.getString("definition"),"UTF-8").replace("<br>","\n");
+                termItem.setTermText(decodedTerm);
+                termItem.setDefText(decodedDef);
                 termItem.setmMatrixed(jsonObject.getInt("mmatrixed")==1);
                 termItem.setmWrited(jsonObject.getInt("mwrited")==1);
                 termItems.add(termItem);
-                Log.i("myTest",termItem.getDefText());
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -142,7 +162,7 @@ public class SetLearnActivity extends AppCompatActivity {
     private void InitRecyclerView(ArrayList<TermItem> termItems){
         RecyclerView recyclerView=findViewById(R.id.termList);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        termListAdapter=new TermListAdapter(termItems);
+        termListAdapter=new TermListAdapter(termItems,this);
         recyclerView.setAdapter(termListAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
@@ -155,7 +175,6 @@ public class SetLearnActivity extends AppCompatActivity {
             String author=bundle.getString("author");
             Long createTime=bundle.getLong("createTime");
             String url = "http://192.168.43.219:8088/api/getmCards?username="+author+"&createTime="+createTime;
-            OkHttpClient okHttpClient=new OkHttpClient();
             final Request request = new Request.Builder()
                     .url(url)
                     .build();
@@ -183,6 +202,4 @@ public class SetLearnActivity extends AppCompatActivity {
             });
         }
     }
-
-
 }

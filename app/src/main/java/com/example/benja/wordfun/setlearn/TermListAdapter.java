@@ -1,16 +1,16 @@
 package com.example.benja.wordfun.setlearn;
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.benja.wordfun.MaxTextDialog;
 import com.example.benja.wordfun.R;
 import com.example.benja.wordfun.SetUtil;
-import com.example.benja.wordfun.setlist.SetListAdpter;
 
 import java.util.ArrayList;
 
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ItemHolder>{
 
     private ArrayList<TermItem> termItems;
+    private Context mContext;
     public class ItemHolder extends RecyclerView.ViewHolder{
 
         private TextView term;
@@ -33,8 +34,9 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ItemHo
         }
     }
 
-    public TermListAdapter(ArrayList<TermItem> termItems) {
+    public TermListAdapter(ArrayList<TermItem> termItems,Context context) {
         this.termItems = termItems;
+        mContext=context;
     }
 
     @Override
@@ -48,10 +50,24 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ItemHo
     public void onBindViewHolder(ItemHolder holder, int position) {
         final String termText=termItems.get(position).getTermText();
         holder.term.setText(termText);
+        holder.term.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaxTextDialog maxTextDialog=new MaxTextDialog(mContext,termText);
+                maxTextDialog.show();
+            }
+        });
 
         final String defText=termItems.get(position).getDefText();
         holder.definition.setText(defText);
-
+        holder.definition.setClickable(true);
+        holder.definition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaxTextDialog maxTextDialog=new MaxTextDialog(mContext,defText);
+                maxTextDialog.show();
+            }
+        });
     }
 
     @Override
