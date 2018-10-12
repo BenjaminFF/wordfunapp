@@ -5,16 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ScrollView
-        android:scrollbarThumbVertical="@color/white"
+        android:scrollbarThumbVertical="@color/light_gray"
         android:scrollbarSize="5px"
+        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/maxTextView"
             android:textSize="24sp"
-            android:textColor="@color/white"
+            android:textColor="@color/light_gray"
             android:includeFontPadding="true"
-            android:paddingHorizontal="24dp"
+            android:paddingVertical="24dp"
+            android:paddingHorizontal="32dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </ScrollView>

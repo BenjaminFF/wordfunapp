@@ -30,6 +30,6 @@ dependencies {
     implementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation 'com.github.BenjaminFF:mBottombar:1.0.0'
-
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.github.BenjaminFF:Rotate3dView:cc8e493e2a'
 }

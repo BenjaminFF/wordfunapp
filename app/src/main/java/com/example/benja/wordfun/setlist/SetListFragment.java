@@ -10,10 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.util.Base64;
 import android.widget.Toast;
@@ -56,7 +58,7 @@ public class SetListFragment extends Fragment {
     private ImageView netHintImg;
     private boolean isConnecting;
     OkHttpClient okHttpClient;
-    View mView;
+    FrameLayout mLayout;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler=new Handler(){
@@ -67,7 +69,7 @@ public class SetListFragment extends Fragment {
                     try {
                         if(msg.getData().getBoolean("connectSucceed")){
                             listItems=getListFromJson(msg.getData().getString("jsonSets"));
-                            InitRecyclerView(listItems,mView);
+                            InitRecyclerView(listItems,mLayout);
                             netHintImg.setVisibility(View.GONE);
                         }else {
                             if(netHintImg.getVisibility()!=View.VISIBLE){
@@ -90,8 +92,8 @@ public class SetListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_set_list, container, false);
-        mView=v;
+        FrameLayout v=(FrameLayout) inflater.inflate(R.layout.fragment_set_list, container, false);
+        mLayout=v;
         swipeRefreshLayout=v.findViewById(R.id.setList_refresh_layout);
         netHintImg=v.findViewById(R.id.setList_netHint_img);
         okHttpClient=new OkHttpClient();
@@ -118,7 +120,7 @@ public class SetListFragment extends Fragment {
     private class getListRunnable implements Runnable{
         @Override
         public void run() {
-            String url = "http://192.168.43.219:8088/api/getwordset?username=benjamin";
+            String url = "http://120.79.141.230:8080/api/getwordset?username=benjamin";
             final Request request = new Request.Builder()
                     .url(url)
                     .build();
@@ -161,7 +163,9 @@ public class SetListFragment extends Fragment {
             ListItem item=new ListItem();
             JSONObject itemJson=sets.getJSONObject(i);
             String decodedTitle= URLDecoder.decode(itemJson.getString("title"),"UTF-8");
+            String decodedsubTitle= URLDecoder.decode(itemJson.getString("subtitle"),"UTF-8");
             item.setTitle(new String(decodedTitle));
+            item.setSubTitle(decodedsubTitle);
             item.setAuthor(itemJson.getString("author"));
             item.setFolder(itemJson.getString("folder"));
             item.setTermCount(itemJson.getInt("termCount"));
@@ -171,22 +175,26 @@ public class SetListFragment extends Fragment {
         return listItems;
     }
 
-    private void InitRecyclerView(ArrayList<ListItem> listItems,View parentView){
-        RecyclerView recyclerView=parentView.findViewById(R.id.setList);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(parentView.getContext());
+    private void InitRecyclerView(ArrayList<ListItem> listItems,FrameLayout parentLayout){
+        RecyclerView recyclerView=parentLayout.findViewById(R.id.setList);
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(parentLayout.getContext());
         setListAdpter=new SetListAdpter(listItems);
         recyclerView.setAdapter(setListAdpter);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.scheduleLayoutAnimation();
         setListAdpter.addRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
-            public void onItemClickListener(View itemView, String author, long createtime) {
+            public void onItemClickListener(View itemView, String title, String subTitle, String author, long createtime, int termCount) {
                 Intent intent=new Intent(getActivity(), SetLearnActivity.class);
                 Bundle bundle=new Bundle();
+                bundle.putString("title",title);
+                bundle.putString("subTitle",subTitle);
                 bundle.putString("author",author);
                 bundle.putLong("createTime",createtime);
+                bundle.putInt("termCount",termCount);
                 intent.putExtra("setInfo",bundle);
                 startActivity(intent);
             }
-        });
+    });
     }
 }

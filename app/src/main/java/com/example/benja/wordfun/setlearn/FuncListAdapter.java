@@ -19,6 +19,7 @@ import java.util.HashMap;
 
 public class FuncListAdapter extends RecyclerView.Adapter<FuncListAdapter.MyHolder> {
     ArrayList<KeyValuePair<Integer,String>> funcs;
+    private OnRecyclerViewItemClickListener recyclerViewItemClickListener;
 
     public FuncListAdapter() {
         funcs=new ArrayList<>();
@@ -48,13 +49,25 @@ public class FuncListAdapter extends RecyclerView.Adapter<FuncListAdapter.MyHold
     }
 
     @Override
-    public void onBindViewHolder(MyHolder holder, int position) {
+    public void onBindViewHolder(final MyHolder holder, final int position) {
         holder.imageView.setImageResource(funcs.get(position).key);
         holder.textView.setText(funcs.get(position).value);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(recyclerViewItemClickListener!=null){
+                    recyclerViewItemClickListener.onItemClickListener(holder.itemView,funcs.get(position).value);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return funcs.size();
+    }
+
+    public void addRecyclerViewItemClickListener(OnRecyclerViewItemClickListener recyclerViewItemClickListener){
+        this.recyclerViewItemClickListener=recyclerViewItemClickListener;
     }
 }

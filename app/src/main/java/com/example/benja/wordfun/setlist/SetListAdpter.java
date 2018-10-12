@@ -35,7 +35,7 @@ public class SetListAdpter extends RecyclerView.Adapter<SetListAdpter.ItemHolder
             private TextView termCount;
             public ItemHolder(View itemView) {
                 super(itemView);
-                ((CardView)itemView).setCardBackgroundColor(SetUtil.getRandomColor(220));
+                ((CardView)itemView).setCardBackgroundColor(SetUtil.getRandomColor(255));
                 title=itemView.findViewById(R.id.listItem_title);
                 createTime=itemView.findViewById(R.id.listItem_createTime);
                 termCount=itemView.findViewById(R.id.listItem_count);
@@ -53,16 +53,18 @@ public class SetListAdpter extends RecyclerView.Adapter<SetListAdpter.ItemHolder
     public void onBindViewHolder(final ItemHolder holder, int position) {
 
         final String title=listItems.get(position).getTitle();
-        int itemCount=listItems.get(position).getTermCount();
+        final String subTitle=listItems.get(position).getSubTitle();
+        final int termCount=listItems.get(position).getTermCount();
         final long createTime=listItems.get(position).getCreateTime();
         holder.title.setText(title);
         holder.createTime.setText(DateFormat.format("yyyy/MM/dd",createTime));
-        holder.termCount.setText(itemCount+" terms");
+        holder.termCount.setText(termCount+" terms");
         final String author=listItems.get(position).getAuthor();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerViewItemClickListener.onItemClickListener(holder.itemView,author,createTime);
+                recyclerViewItemClickListener.onItemClickListener(holder.itemView,
+                        title,subTitle,author,createTime,termCount);
             }
         });
         //holder.createTime.setText(createTime);

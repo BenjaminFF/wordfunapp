@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.benja.wordfun.setlearn.setcardslearn.CardsLearnActivity">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <ImageView
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:id="@+id/cl_return"
+            android:src="@drawable/vd_cross"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:padding="8dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp" />
+        <TextView
+            android:id="@+id/cards_learn_progress_text"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="32dp"
+            android:textSize="24sp"
+            android:text="1/12"
+            android:textColor="@color/grey_blue"
+            android:letterSpacing="0.1"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:id="@+id/cards_learn_play"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginLeft="84dp"
+            android:src="@drawable/vd_play"
+            android:padding="6dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        <ImageView
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:id="@+id/cards_learn_shuffle"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginLeft="0dp"
+            android:src="@drawable/vd_shuffle"
+            android:padding="6dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:clipChildren="false"
+        android:layoutAnimation="@anim/layout_anim_fade_in"
+        android:id="@+id/cards_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

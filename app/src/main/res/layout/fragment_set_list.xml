@@ -44,6 +44,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/setList"
                     android:overScrollMode="never"
+                    android:layoutAnimation="@anim/layout_anim_slide_left_in"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </android.support.v7.widget.RecyclerView>

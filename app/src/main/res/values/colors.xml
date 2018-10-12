@@ -15,6 +15,7 @@
     <color name="silver">#BFC0C0</color>
     <color name="grey_blue">#8D99AE</color>
     <color name="dark">#000000</color>
+    <color name="light_black">#d2000000</color>
     <color name="light_gray">#eaeaea</color>
     <color name="transparent">#00000000</color>
 

@@ -12,13 +12,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.benja.wordfun.R;
 import com.example.benja.wordfun.SetUtil;
+import com.example.benja.wordfun.setlearn.setcardslearn.CardsLearnActivity;
 import com.example.benja.wordfun.setlist.SetListAdpter;
 import com.example.benja.wordfun.setlist.SetListFragment;
 
@@ -48,6 +51,7 @@ public class SetLearnActivity extends AppCompatActivity {
     private OkHttpClient okHttpClient;
     private boolean isConnecting;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private String TermSetsJson;
     @SuppressLint("HandlerLeak")
     private Handler mHandler=new Handler(){
         @Override
@@ -55,7 +59,8 @@ public class SetLearnActivity extends AppCompatActivity {
             switch (msg.what){
                 case listItemsMsg:
                     try {
-                        termItems=getTermItems(msg.getData().getString("TermSetsJson"));
+                        TermSetsJson=msg.getData().getString("TermSetsJson");
+                        termItems=getTermItems(TermSetsJson);
                         InitRecyclerView(termItems);
                         isConnecting=false;
                         swipeRefreshLayout.setRefreshing(false);
@@ -74,10 +79,32 @@ public class SetLearnActivity extends AppCompatActivity {
         new Thread(new getTermListRunnable()).start();
         isConnecting=true;
         initToolbar();
+
+        initViews();
+    }
+
+    private void initViews(){
+
         funcRecyclerView=findViewById(R.id.setLearn_funcRecyclerView);
         FuncListAdapter funcListAdapter=new FuncListAdapter();
         funcRecyclerView.setAdapter(funcListAdapter);
         funcRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        funcListAdapter.addRecyclerViewItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClickListener(View itemView, String author, long createtime) {
+
+            }
+
+            @Override
+            public void onItemClickListener(View itemView, String title) {
+                if(title.equals("信息")){
+                    showInfoDialog();
+                }else if(title.equals("单词卡")){
+                    openCardsLearn();
+                }
+            }
+        });
+
         swipeRefreshLayout=findViewById(R.id.termList_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -88,6 +115,25 @@ public class SetLearnActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void showInfoDialog(){
+        ArrayList<KeyValuePair<String,String>> setInfoItems=new ArrayList<>();
+        Intent intent=getIntent();
+        Bundle bundle=intent.getBundleExtra("setInfo");
+        String setInfoTitle=bundle.getString("title");
+        String setInfosubTitle=bundle.getString("subTitle");
+        String author=bundle.getString("author");
+        int termCount=bundle.getInt("termCount");
+        String createTime=(String) DateFormat.format("yyyy/MM/dd",bundle.getLong("createTime"));
+        setInfoItems.add(new KeyValuePair<String, String>("标题",setInfoTitle));
+        setInfoItems.add(new KeyValuePair<String, String>("副标题",setInfosubTitle));
+        setInfoItems.add(new KeyValuePair<String, String>("作者",author));
+        setInfoItems.add(new KeyValuePair<String, String>("单词集数量",termCount+""));
+        setInfoItems.add(new KeyValuePair<String, String>("创建时间",createTime+""));
+        Log.i("setInfoTitle",setInfoItems.size()+"");
+        SetInfoDialog setInfoDialog=new SetInfoDialog(this,setInfoItems);
+        setInfoDialog.show();
     }
 
     private void initToolbar(){
@@ -165,6 +211,7 @@ public class SetLearnActivity extends AppCompatActivity {
         termListAdapter=new TermListAdapter(termItems,this);
         recyclerView.setAdapter(termListAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.scheduleLayoutAnimation();
     }
 
     private class getTermListRunnable implements Runnable{
@@ -174,7 +221,7 @@ public class SetLearnActivity extends AppCompatActivity {
             Bundle bundle=intent.getBundleExtra("setInfo");
             String author=bundle.getString("author");
             Long createTime=bundle.getLong("createTime");
-            String url = "http://192.168.43.219:8088/api/getmCards?username="+author+"&createTime="+createTime;
+            String url = "http://120.79.141.230:8080/api/getmCards?username="+author+"&createTime="+createTime;
             final Request request = new Request.Builder()
                     .url(url)
                     .build();
@@ -201,5 +248,13 @@ public class SetLearnActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void openCardsLearn(){
+        Intent intent=getIntent();
+        Intent launchIntent=new Intent(SetLearnActivity.this,CardsLearnActivity.class);
+        Bundle bundle=intent.getBundleExtra("setInfo");
+        launchIntent.putExtra("setInfo",bundle);
+        startActivity(launchIntent);
     }
 }

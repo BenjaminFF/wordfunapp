@@ -23,8 +23,27 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="fadeAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
     <style name="MaxTextDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/light_black</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="SetInfoDialog" parent="android:style/Theme.Dialog">
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="CardsLearnTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

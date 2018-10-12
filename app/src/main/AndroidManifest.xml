@@ -3,7 +3,7 @@
     package="com.example.benja.wordfun">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Splash">
@@ -24,9 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".setlearn.SetLearnActivity"
-            android:theme="@style/SetLearnTheme"
-            ></activity>
+        <activity
+            android:name=".setlearn.SetLearnActivity"
+            android:theme="@style/SetLearnTheme" />
+        <activity android:name=".setlearn.setcardslearn.CardsLearnActivity"
+            android:theme="@style/CardsLearnTheme"
+            >
+        </activity>
     </application>
 
 </manifest>

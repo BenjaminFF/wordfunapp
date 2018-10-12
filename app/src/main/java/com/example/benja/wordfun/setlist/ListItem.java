@@ -6,6 +6,7 @@ package com.example.benja.wordfun.setlist;
 
 public class ListItem {
     private String title;
+    private String subTitle;
     private int termCount;
     private long createTime;
     private String author;
@@ -58,5 +59,13 @@ public class ListItem {
 
     public void setFolder(String folder) {
         this.folder = folder;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
     }
 }

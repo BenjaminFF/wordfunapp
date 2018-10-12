@@ -50,22 +50,24 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ItemHo
     public void onBindViewHolder(ItemHolder holder, int position) {
         final String termText=termItems.get(position).getTermText();
         holder.term.setText(termText);
-        holder.term.setOnClickListener(new View.OnClickListener() {
+        holder.term.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 MaxTextDialog maxTextDialog=new MaxTextDialog(mContext,termText);
                 maxTextDialog.show();
+                return false;
             }
         });
 
         final String defText=termItems.get(position).getDefText();
         holder.definition.setText(defText);
         holder.definition.setClickable(true);
-        holder.definition.setOnClickListener(new View.OnClickListener() {
+        holder.definition.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
                 MaxTextDialog maxTextDialog=new MaxTextDialog(mContext,defText);
                 maxTextDialog.show();
+                return false;
             }
         });
     }
