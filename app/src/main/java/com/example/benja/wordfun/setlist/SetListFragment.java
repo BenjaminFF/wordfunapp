@@ -12,9 +12,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.util.Base64;
@@ -29,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,36 +60,47 @@ public class SetListFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView netHintImg;
     private boolean isConnecting;
-    OkHttpClient okHttpClient;
-    FrameLayout mLayout;
+    private OkHttpClient okHttpClient;
+    private FrameLayout mLayout;
+    private EditText editText;
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler=new Handler(){
+    private static class MyHandler extends Handler{
+        private final WeakReference<SetListFragment> mFragment;
+
+        public MyHandler(SetListFragment fragment) {
+            mFragment = new WeakReference<SetListFragment>(fragment);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
-                case listItemsMsg:
-                    try {
-                        if(msg.getData().getBoolean("connectSucceed")){
-                            listItems=getListFromJson(msg.getData().getString("jsonSets"));
-                            InitRecyclerView(listItems,mLayout);
-                            netHintImg.setVisibility(View.GONE);
-                        }else {
-                            if(netHintImg.getVisibility()!=View.VISIBLE){
-                                netHintImg.setVisibility(View.VISIBLE);
+            final SetListFragment fragment=mFragment.get();
+            if(fragment!=null){
+                switch (msg.what){
+                    case listItemsMsg:
+                        try {
+                            if(msg.getData().getBoolean("connectSucceed")){
+                                fragment.listItems=fragment.getListFromJson(msg.getData().getString("jsonSets"));
+                                fragment.InitRecyclerView(fragment.listItems,fragment.mLayout);
+                                fragment.netHintImg.setVisibility(View.GONE);
+                            }else {
+                                if(fragment.netHintImg.getVisibility()!=View.VISIBLE){
+                                    fragment.netHintImg.setVisibility(View.VISIBLE);
+                                }
                             }
+                            fragment.isConnecting=false;
+                            if(fragment.swipeRefreshLayout.isRefreshing()){
+                                fragment.swipeRefreshLayout.setRefreshing(false);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-                        isConnecting=false;
-                        if(swipeRefreshLayout.isRefreshing()){
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    break;
+                        break;
+                }
             }
         }
-    };
+    }
+    private MyHandler mHandler=new MyHandler(this);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,6 +126,18 @@ public class SetListFragment extends Fragment {
                     new Thread(new getListRunnable()).start();
                     isConnecting=true;
                 }
+            }
+        });
+        editText=v.findViewById(R.id.setList_search_edittext);
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_UP) && (keyCode == KeyEvent.KEYCODE_BACK)) {
+                    editText.clearFocus();
+                    return true;
+                }
+                Log.i("keyCode",keyCode+"");
+                return false;
             }
         });
         return v;

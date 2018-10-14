@@ -12,9 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <EditText
+            android:id="@+id/setList_search_edittext"
             android:hint="筛选单词集"
             android:singleLine="true"
             android:textSize="20sp"
+            android:focusableInTouchMode="true"
             android:textCursorDrawable="@drawable/edit_cursor"
             android:background="@drawable/search_edit"
             android:layout_marginHorizontal="10dp"

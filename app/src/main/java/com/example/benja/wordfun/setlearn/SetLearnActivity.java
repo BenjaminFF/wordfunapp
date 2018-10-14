@@ -1,9 +1,6 @@
 package com.example.benja.wordfun.setlearn;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -15,20 +12,17 @@ import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.benja.wordfun.R;
-import com.example.benja.wordfun.SetUtil;
 import com.example.benja.wordfun.setlearn.setcardslearn.CardsLearnActivity;
-import com.example.benja.wordfun.setlist.SetListAdpter;
-import com.example.benja.wordfun.setlist.SetListFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 
@@ -52,25 +46,36 @@ public class SetLearnActivity extends AppCompatActivity {
     private boolean isConnecting;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String TermSetsJson;
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler=new Handler(){
-        @Override
+
+    private static class MyHandler extends Handler{
+
+        private final WeakReference<SetLearnActivity> mActivity;
+
+        public MyHandler(SetLearnActivity activity) {
+            mActivity = new WeakReference<SetLearnActivity>(activity);
+        }
+
         public void handleMessage(Message msg) {
-            switch (msg.what){
-                case listItemsMsg:
-                    try {
-                        TermSetsJson=msg.getData().getString("TermSetsJson");
-                        termItems=getTermItems(TermSetsJson);
-                        InitRecyclerView(termItems);
-                        isConnecting=false;
-                        swipeRefreshLayout.setRefreshing(false);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    break;
+            final SetLearnActivity activity=mActivity.get();
+            if(activity!=null) {
+                switch (msg.what){
+                    case listItemsMsg:
+                        try {
+                            activity.TermSetsJson=msg.getData().getString("TermSetsJson");
+                            activity.termItems=activity.getTermItems(activity.TermSetsJson);
+                            activity.InitRecyclerView(activity.termItems);
+                            activity.isConnecting=false;
+                            activity.swipeRefreshLayout.setRefreshing(false);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        break;
+                }
             }
         }
-    };
+    }
+
+    private MyHandler mHandler=new MyHandler(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -102,11 +102,10 @@ public class CardsLearnActivity extends AppCompatActivity {
                         activity.initViews();
                         break;
                     case UpdateFailed:
-                        activity.onBackPressed();
                         Toast.makeText(activity,"更新数据失败",Toast.LENGTH_LONG).show();
                         break;
                     case UpdateSuccess:
-                        activity.onBackPressed();
+                        activity.finish();
                         break;
                 }
             }
@@ -206,7 +205,7 @@ public class CardsLearnActivity extends AppCompatActivity {
         returnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateflashsToServer();
+                onBackPressed();
             }
         });
 
@@ -414,5 +413,10 @@ public class CardsLearnActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return jsonflashs;
+    }
+
+    @Override
+    public void onBackPressed() {
+        updateflashsToServer();
     }
 }
